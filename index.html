@@ -3,161 +3,158 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Music Portfolio</title>
+<title>音乐播放列表示例</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
   body {
-    font-family: 'Poppins', sans-serif;
-    background: #f5f7fa;
-    margin: 20px;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
+    font-family: Arial, sans-serif;
+    max-width: 700px;
+    margin: 20px auto;
+    background: #f9f9f9;
   }
-  h1 {
-    text-align: center;
-    color: #1e90ff;
-    margin-bottom: 40px;
-  }
-  .album-card {
+  .track-card {
+    display: flex;
+    align-items: center;
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    padding: 20px;
-    margin-bottom: 30px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
   }
-  .album-header {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-  .album-cover {
-    width: 150px;
-    height: 150px;
-    border-radius: 10px;
+  .cover {
+    width: 60px;
+    height: 60px;
     object-fit: cover;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 4px;
   }
-  .album-info {
+  .track-info {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    margin-left: 15px;
   }
-  .album-title {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 6px;
-    color: #333;
+  .track-name {
+    font-weight: bold;
+    font-size: 16px;
   }
-  .album-desc {
-    font-size: 1rem;
-    color: #555;
-  }
-  .track-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .track-item {
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-    border-top: 1px solid #eee;
-  }
-  .track-item:first-child {
-    border-top: none;
-  }
-  .track-cover {
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-right: 15px;
-  }
-  .track-title {
-    flex-grow: 1;
-    font-weight: 600;
-    color: #222;
-  }
-  .play-button {
-    background: #1e90ff;
+  button.play-btn {
+    padding: 8px 14px;
+    font-size: 14px;
     border: none;
+    border-radius: 4px;
+    background-color: #4caf50;
     color: white;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
+    user-select: none;
   }
-  .play-button:hover {
-    background: #0d6efd;
-  }
-  /* Simple play icon */
-  .play-button::before {
-    content: '';
-    display: inline-block;
-    margin-left: 3px;
-    border-style: solid;
-    border-width: 8px 0 8px 14px;
-    border-color: transparent transparent transparent white;
+  button.play-btn.paused {
+    background-color: #f44336;
   }
 </style>
 </head>
 <body>
 
-<h1>Music Portfolio</h1>
+<h2>音乐播放列表</h2>
 
-<div class="album-card">
-  <div class="album-header">
-    <img src="https://via.placeholder.com/150" alt="Album Cover" class="album-cover" />
-    <div class="album-info">
-      <div class="album-title">Fantasy Game Soundtrack</div>
-      <div class="album-desc">Original compositions inspired by fantasy role-playing games, featuring orchestral and ethnic instruments.</div>
-    </div>
-  </div>
-  <ul class="track-list">
-    <li class="track-item">
-      <img src="https://via.placeholder.com/50" alt="Track Cover" class="track-cover" />
-      <div class="track-title">Forest Warriors</div>
-      <button class="play-button" onclick="playAudio('audio1')"></button>
-      <audio id="audio1" src="audio/forest-warriors.mp3"></audio>
-    </li>
-    <li class="track-item">
-      <img src="https://via.placeholder.com/50" alt="Track Cover" class="track-cover" />
-      <div class="track-title">Ancient Dragon</div>
-      <button class="play-button" onclick="playAudio('audio2')"></button>
-      <audio id="audio2" src="audio/ancient-dragon.mp3"></audio>
-    </li>
-    <li class="track-item">
-      <img src="https://via.placeholder.com/50" alt="Track Cover" class="track-cover" />
-      <div class="track-title">Village Peace</div>
-      <button class="play-button" onclick="playAudio('audio3')"></button>
-      <audio id="audio3" src="audio/village-peace.mp3"></audio>
-    </li>
-  </ul>
+<div id="playlist">
+  <!-- 音轨卡片将由JS动态生成 -->
 </div>
 
 <script>
-  // 播放功能，保证一次只播放一个音频
-  let currentAudio = null;
-  function playAudio(id) {
-    const audio = document.getElementById(id);
+const tracks = [
+  {
+    name: "Siren",
+    cover: "https://raw.githubusercontent.com/HR-Music/HR-Music.github.io/refs/heads/main/%E2%80%9CEchoes%20of%20the%20Land%20Veins%E2%80%9D/01.%20Siren.jpg", // 换成实际封面图链接
+    url: "https://my.microsoftpersonalcontent.com/personal/4340f57cd61addc9/_layouts/15/download.aspx?UniqueId=4f74bb3b-2d76-46f8-a85a-6f3302cfa97b&amp;Translate=false&amp;tempauth=v1e.eyJzaXRlaWQiOiJlYTBmYzczNS0yZDI2LTQzZmYtYWY2Ny1lZGU1MjJlMDRlNzAiLCJhcHBpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDA0ODE3MTBhNCIsImF1ZCI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9teS5taWNyb3NvZnRwZXJzb25hbGNvbnRlbnQuY29tQDkxODgwNDBkLTZjNjctNGM1Yi1iMTEyLTM2YTMwNGI2NmRhZCIsImV4cCI6IjE3NDc4NjQwODUifQ.6nTYmFsIDqYp850JILrsNs1y5J_caDWjC80w9k-WxsjdExlaSL-ZSnnxXlVqlIvMdL5GR23jOOHRLTomBUN4UxKE2PqmpcipyFE1qgyL2CyEELYN48xXiODKiYil_d7BlzN_OwxvaMSMIiUbGvKkudhOCrV3KsDTtqdpQb_sNp6so8I8RcYlosEUTj9ZQPPraKOjGRjf1o67VFfzShsWSsdsfxenQx9n0nJ6b34-fs_HT40hymh6YNG8kqZFsRBV5lpPMqEkjQvcyRWp6Nc-xQB9d0tmr5BvEWDXfSBVo0S2QZDGbmYr4pQkWx9RUiIPnGEIZbDVFTqdjb9SINDeKcgRTIBB8ckwMyO2f3tcyRFpRy624s0qaz-P2g0yFMNLpMF6VsmeHWXdt8g6j-VJkw.5Elnus-1Lt74YT5_A69TySlHFE6QyV2mBn20PPLoVJs&amp;ApiVersion=2.0&amp;AVOverride=1
+"
+  },
+  {
+    name: "Forest Warrior",
+    cover: "https://raw.githubusercontent.com/HR-Music/HR-Music.github.io/refs/heads/main/%E2%80%9CEchoes%20of%20the%20Land%20Veins%E2%80%9D/02.%20Forest%20Warrior.jpg",
+    url: "https://my.microsoftpersonalcontent.com/personal/4340f57cd61addc9/_layouts/15/download.aspx?UniqueId=c6bbcfb2-0385-45da-abdd-1b2216a9ac06&amp;Translate=false&amp;tempauth=v1e.eyJzaXRlaWQiOiJlYTBmYzczNS0yZDI2LTQzZmYtYWY2Ny1lZGU1MjJlMDRlNzAiLCJhcHBpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDA0ODE3MTBhNCIsImF1ZCI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9teS5taWNyb3NvZnRwZXJzb25hbGNvbnRlbnQuY29tQDkxODgwNDBkLTZjNjctNGM1Yi1iMTEyLTM2YTMwNGI2NmRhZCIsImV4cCI6IjE3NDc4NjQyODUifQ.etyO6L3krsCaWhaZ77ESwYl5oBADsh45pKYkJ4KNgu94_XySx5GV2LXbQcuyNyzIzNqo_p9gTlv1LBtrQ9pWEtzInItwcyw-mIMpRsW1d-RKwyytTYj80_csA_E50YINSylvEiG_JNHHs9k71xnp3G22HIGnWO0lqQEbJEoxJVahg2hRBnzMgsEeVYDYIHa9K_CRosamzNhbigOFi-snTF1YQzFkkYpeukeBKI-NQH9_gdgPOyU9BwSWRIxtcqTFhWHHn9H3js6dOJmyQwTEMhS2ca1PNgi2dOeSr3OcXSYyW2GxPbZ-UAf1yasWRf5_2iOvhtezx3ILWet7UUpHfvObxLUF-ZIv6_9VfJE7t6SLGECwdXDPm4ZtqQjuTjbFAzEiApz1cCu9JHtTDLieXA.ltF-2XBMmf78H5EIjFFWvkNXZczOXAd8b-fzBhMIO78&amp;ApiVersion=2.0&amp;AVOverride=1"
+  },
+  {
+    name: "Village",
+    cover: "https://raw.githubusercontent.com/HR-Music/HR-Music.github.io/refs/heads/main/%E2%80%9CEchoes%20of%20the%20Land%20Veins%E2%80%9D/03.%20Village%20(Draft).jpg",
+    url: "https://my.microsoftpersonalcontent.com/personal/4340f57cd61addc9/_layouts/15/download.aspx?UniqueId=737458c3-39b9-46f0-bc1a-18807334bf9f&amp;Translate=false&amp;tempauth=v1e.eyJzaXRlaWQiOiJlYTBmYzczNS0yZDI2LTQzZmYtYWY2Ny1lZGU1MjJlMDRlNzAiLCJhcHBpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDA0ODE3MTBhNCIsImF1ZCI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9teS5taWNyb3NvZnRwZXJzb25hbGNvbnRlbnQuY29tQDkxODgwNDBkLTZjNjctNGM1Yi1iMTEyLTM2YTMwNGI2NmRhZCIsImV4cCI6IjE3NDc4NjQ0NDkifQ.NT8zW1tDpO71Htr_n-_jQDoCvay8sWkdUKvAo2mPiBrKNzVGwaArHsHepcIJzRuFFZ6rzOID1wul6AnwQ36yJhwgxMZBXWs5NFYT-OexhIxubPgAela8ZwKD6IbBhbhAmWnIIPM0ev42w6vyaL_eDABZcjeitlLFntDZUukdlPqzGz6HqR7fgrL74z2PRFHsRYAbRTmD2_D_EbbqnzV0XINSv0yWSKKieMHGihdOvSZ2s9vQNNusL_mNW54LvsdPrpTO-Ib9r7ddHrsgqoHA6364xjMPuax7kQ-VHQ9KaSW5aP9Rjg3SYX4_dfCG0s298BAquGRKiCPNxNzgPn6aL50Uf7wPZBl5Y1JEfR6GAvi0gn7CnP06UUh9ibICfTXohgbi9gFM5V2Q1wloKCF3ww.lVhGw6b_f_ExERnHH8IPy2da9jzB8hdA3aMXP-Ix5MU&amp;ApiVersion=2.0&amp;AVOverride=1"
+  },
+  {
+    name: "Dragon",
+    cover: "https://raw.githubusercontent.com/HR-Music/HR-Music.github.io/refs/heads/main/%E2%80%9CEchoes%20of%20the%20Land%20Veins%E2%80%9D/04.%20Dragon%20(Draft).jpg",
+    url: "https://my.microsoftpersonalcontent.com/personal/4340f57cd61addc9/_layouts/15/download.aspx?UniqueId=3f04183c-bd25-477a-b18a-60db061657fd&amp;Translate=false&amp;tempauth=v1e.eyJzaXRlaWQiOiJlYTBmYzczNS0yZDI2LTQzZmYtYWY2Ny1lZGU1MjJlMDRlNzAiLCJhcHBpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDA0ODE3MTBhNCIsImF1ZCI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9teS5taWNyb3NvZnRwZXJzb25hbGNvbnRlbnQuY29tQDkxODgwNDBkLTZjNjctNGM1Yi1iMTEyLTM2YTMwNGI2NmRhZCIsImV4cCI6IjE3NDc4NjQ1NDQifQ.ICPtvAARNdj5CQYwRNsZgHUUacooa2pD4VFFq4oqSjmY6qTyJgZQskjdX-MQMdZ4dDynqbs-WYxU7_Vg_9pjgaeWVchM_EfyOSqurijBKTZ-SOz1Fw42UJBU2cnzBoJ9wzrFj1pcfviL5GNi-6KnN8wwqFbswSIQ97Hr_t0vlTqHYoC0mxok3XUhsGI2C1WESRGUr_fWWwwpvv4lwgoLOXwPSPz-mxA__yTrcU81DFdUAwSznR4Dp6_uFyg5GFrHOhHYPws-P9rSSspIHKTgjHxtJFmnGBUZIQD_DEcATRVEFNDPdy81Oa8NbSPze-YjFG4e5IX7SkOiJEZD-fobiI-BlIBL7GeRdznKJTiV_rcVy5WKRFwJCbEKeeGJ4entYYtg0zzt-fd-eF_wGix5tQ.-lukq7AuLPOwnW33rH3PzkJ-smq1KVjHQm6MixTd414&amp;ApiVersion=2.0&amp;AVOverride=1"
+  },
+  {
+    name: "Dwarf",
+    cover: "https://raw.githubusercontent.com/HR-Music/HR-Music.github.io/refs/heads/main/%E2%80%9CEchoes%20of%20the%20Land%20Veins%E2%80%9D/05.%20Dwarf%20(Draft).jpg",
+    url: "https://my.microsoftpersonalcontent.com/personal/4340f57cd61addc9/_layouts/15/download.aspx?UniqueId=d51bb235-7a62-4c4d-901a-84f8a4e8f6e2&amp;Translate=false&amp;tempauth=v1e.eyJzaXRlaWQiOiJlYTBmYzczNS0yZDI2LTQzZmYtYWY2Ny1lZGU1MjJlMDRlNzAiLCJhcHBpZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDA0ODE3MTBhNCIsImF1ZCI6IjAwMDAwMDAzLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9teS5taWNyb3NvZnRwZXJzb25hbGNvbnRlbnQuY29tQDkxODgwNDBkLTZjNjctNGM1Yi1iMTEyLTM2YTMwNGI2NmRhZCIsImV4cCI6IjE3NDc4NjQ2MjEifQ.vel6MtqgLT1cf3SzSNvMxRaUgmnuFEVAZh0pqO9OwJ1jFMY6UxqW0EQDN4Ilth1xHF72Nr0xKaJesS7gtFN9K13mxXX5nqWW13y9isoOEQQANH_4t6UoQFze02s_aN88El7DyrdSXFjaAiJRLbuWvmr2871cuza4sz-gfNFJDMFc0atu0-eh6eMlfHcf6bIMhKjVv2ZxGgDWw28awkwbGSziokm4yL--gFNTENtaH4IUkYHQ1dU2ztQurIzfJ_igdpZHEWkoPQrxxCBar-CUJ8GCVDKHeao135HJb76AmoWB4UxRkkcjhrZuEIRy2IQEx0HUIrES62FEsfpmoHsL9oV4bCD1t6h4y6KYhjuILZtWCRmDAktEn7T2Tzxl0XFLkIp_ZyVv-GNkymDwJkAeCg.8VuaKLSSM9dXdeaRHLk9HFHbjzsSffNazJ009OtEvT0&amp;ApiVersion=2.0&amp;AVOverride=1"
+  }
+];
+
+const playlistEl = document.getElementById('playlist');
+let currentAudio = null;
+let currentBtn = null;
+
+function createTrackCard(track, index) {
+  const card = document.createElement('div');
+  card.className = 'track-card';
+
+  const coverImg = document.createElement('img');
+  coverImg.className = 'cover';
+  coverImg.src = track.cover;
+  coverImg.alt = track.name + ' 封面';
+
+  const infoDiv = document.createElement('div');
+  infoDiv.className = 'track-info';
+
+  const trackName = document.createElement('div');
+  trackName.className = 'track-name';
+  trackName.textContent = track.name;
+
+  infoDiv.appendChild(trackName);
+
+  const playBtn = document.createElement('button');
+  playBtn.className = 'play-btn';
+  playBtn.textContent = '播放';
+
+  // 创建音频对象（懒加载也可以改成页面创建时）
+  const audio = new Audio(track.url);
+
+  playBtn.addEventListener('click', () => {
     if (currentAudio && currentAudio !== audio) {
+      // 停止之前播放的音频
       currentAudio.pause();
-      currentAudio.currentTime = 0;
+      if (currentBtn) {
+        currentBtn.textContent = '播放';
+        currentBtn.classList.remove('paused');
+      }
     }
     if (audio.paused) {
       audio.play();
+      playBtn.textContent = '暂停';
+      playBtn.classList.add('paused');
       currentAudio = audio;
+      currentBtn = playBtn;
     } else {
       audio.pause();
-      currentAudio = null;
+      playBtn.textContent = '播放';
+      playBtn.classList.remove('paused');
     }
-  }
+  });
+
+  // 音频播放结束后恢复按钮状态
+  audio.addEventListener('ended', () => {
+    playBtn.textContent = '播放';
+    playBtn.classList.remove('paused');
+  });
+
+  card.appendChild(coverImg);
+  card.appendChild(infoDiv);
+  card.appendChild(playBtn);
+
+  return card;
+}
+
+// 生成列表
+tracks.forEach((track, i) => {
+  playlistEl.appendChild(createTrackCard(track, i));
+});
 </script>
 
 </body>
