@@ -150,50 +150,5 @@
       justify-content: center;
       gap: 4px;
     }
-    .track-card {
-      border: 1px solid #ccc;
-      padding: 12px;
-      margin-bottom: 16px;
-      width: 250px;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-    .cover {
-      width: 100%;
-      height: auto;
-      display: block;
-      margin-bottom: 8px;
-    }
-    .track-name {
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    .play-btn {
-      padding: 6px 12px;
-      cursor: pointer;
-      margin-bottom: 8px;
-    }
-    .play-btn.paused {
-      background-color: #ff6666;
-      color: white;
-    }
-    .play-btn.loading {
-      background-color: #aaa;
-      color: white;
-      cursor: wait;
-    }
-    .progress-bar {
-      width: 100%;
-      margin-bottom: 8px;
-    }
-    .time-container {
-      font-size: 14px;
-      color: #333;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: center;
-      gap: 4px;
-    }
 
-
-</style> 
+  </style> 
